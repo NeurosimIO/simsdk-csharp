@@ -1,7 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <PackageId>SimSDK</PackageId>
+    <Version>0.0.16</Version>
+    <Authors>Pete Kofod</Authors>
+    <Company>NeuroSim</Company>
+    <RepositoryUrl>https://github.com/neurosimio/simsdk-csharp</RepositoryUrl>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludePackageReadmeFile>true</IncludePackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,5 +21,6 @@
 
   <ItemGroup>
     <Protobuf Include="Protos/plugin.proto" GrpcServices="Server" />
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
