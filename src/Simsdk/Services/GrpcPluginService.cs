@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
-using Grpc.Core;
-using SimSDK.Converters;
-using SimSDK.Models;
-using SimSDK.Interfaces;
-using Rpc = Simsdkrpc;
 using System.Linq;
+using System.Threading.Tasks;
+using Grpc.AspNetCore.Server;
+using Microsoft.AspNetCore.Mvc;
+using SimSDK.Converters;
+using SimSDK.Interfaces;
+using SimSDK.Models;
+using Rpc = Simsdkrpc;
 
 namespace SimSDK.Services
 {
@@ -17,9 +18,10 @@ namespace SimSDK.Services
             _plugin = plugin;
         }
 
-        public override Task<Rpc.ManifestResponse> GetManifest(Rpc.ManifestRequest request, ServerCallContext context)
+        public override Task<Rpc.ManifestResponse> GetManifest(Rpc.ManifestRequest request,
+            Grpc.Core.ServerCallContext context)
         {
-            Manifest manifest = _plugin.GetManifest();
+            var manifest = _plugin.GetManifest();
             var response = new Rpc.ManifestResponse
             {
                 Manifest = ManifestConverter.ToProto(manifest)
@@ -27,7 +29,8 @@ namespace SimSDK.Services
             return Task.FromResult(response);
         }
 
-        public override Task<Rpc.CreateComponentResponse> CreateComponentInstance(Rpc.CreateComponentRequest request, ServerCallContext context)
+        public override Task<Rpc.CreateComponentResponse> CreateComponentInstance(Rpc.CreateComponentRequest request,
+            Grpc.Core.ServerCallContext context)
         {
             var modelRequest = new CreateComponentRequest
             {
@@ -40,18 +43,22 @@ namespace SimSDK.Services
             return Task.FromResult(new Rpc.CreateComponentResponse());
         }
 
-        public override Task<Google.Protobuf.WellKnownTypes.Empty> DestroyComponentInstance(Rpc.DestroyComponentRequest request, ServerCallContext context)
+        public override Task<Google.Protobuf.WellKnownTypes.Empty> DestroyComponentInstance(
+            Rpc.DestroyComponentRequest request, Grpc.Core.ServerCallContext context)
         {
             _plugin.DestroyComponentInstance(request.ComponentId);
             return Task.FromResult(new Google.Protobuf.WellKnownTypes.Empty());
         }
 
-        public override Task<Rpc.MessageResponse> HandleMessage(Rpc.SimMessage request, ServerCallContext context)
+        public override Task<Rpc.MessageResponse> HandleMessage(Rpc.SimMessage request,
+            Grpc.Core.ServerCallContext context)
         {
-            SimMessage simMessage = SimMessageConverter.FromProto(request);
+            var simMessage = SimMessageConverter.FromProto(request);
             var responses = _plugin.HandleMessage(simMessage);
+
             var reply = new Rpc.MessageResponse();
             reply.OutboundMessages.AddRange(responses.ConvertAll(SimMessageConverter.ToProto));
+
             return Task.FromResult(reply);
         }
     }
