@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>SimSDK</PackageId>
-    <Version>0.0.18</Version>
+    <Version>0.1.0</Version>
     <Authors>Pete Kofod</Authors>
     <Company>NeuroSim</Company>
     <RepositoryUrl>https://github.com/neurosimio/simsdk-csharp</RepositoryUrl>
