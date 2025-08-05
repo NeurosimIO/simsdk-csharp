@@ -1,6 +1,11 @@
 using System;
 using System.Collections.Generic;
 
+using Simsdk.Converters;
+
+using RpcFieldType = Simsdkrpc.FieldType;
+
+
 namespace SimSDK.Models
 {
     public class Manifest
@@ -60,16 +65,16 @@ namespace SimSDK.Models
 
     public enum FieldType
     {
-        FIELD_TYPE_UNSPECIFIED = 0,
-        STRING = 1,
-        INT = 2,
-        UINT = 3,
-        FLOAT = 4,
-        BOOL = 5,
-        ENUM = 6,
-        TIMESTAMP = 7,
-        REPEATED = 8,
-        OBJECT = 9
+        Unspecified = 0,
+        String = 1,
+        Int = 2,
+        Uint = 3,
+        Float = 4,
+        Bool = 5,
+        Enum = 6,
+        Timestamp = 7,
+        Repeated = 8,
+        Object = 9
     }
 
     public class CreateComponentRequest
@@ -92,4 +97,35 @@ namespace SimSDK.Models
     {
         public List<SimMessage> OutboundMessages { get; set; } = new();
     }
+
+    public class PluginAck
+    {
+
+        public string? MessageId { get; set; }
+    }
+    public class PluginNak
+    {
+        public string? MessageId { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
+    }
+
+    public class PluginInit
+    {
+        public string ComponentId { get; set; } = string.Empty;
+    }
+    public class PluginShutdown
+    {
+        public string Reason { get; set; } = string.Empty;
+    }
+    
+    public class PluginMessageEnvelope
+{
+    public SimMessage? SimMessage { get; set; }
+    public PluginAck? Ack { get; set; }
+    public PluginNak? Nak { get; set; }
+    public PluginInit? Init { get; set; }
+    public PluginShutdown? Shutdown { get; set; }
+}
+
+
 }

@@ -1,13 +1,18 @@
 using System.Collections.Generic;
-using SimSDK.Models;
+using Model = SimSDK.Models;
 
 namespace SimSDK.Interfaces
 {
     public interface IPlugin
     {
-        Manifest GetManifest();
-        void CreateComponentInstance(CreateComponentRequest request);
+        Model.Manifest GetManifest();
+        void CreateComponentInstance(Model.CreateComponentRequest request);
         void DestroyComponentInstance(string componentId);
-        List<SimMessage> HandleMessage(SimMessage message);
+        List<Model.SimMessage> HandleMessage(Model.SimMessage message);
+    }
+
+    public interface IPluginWithHandlers : IPlugin
+    {
+        IStreamHandler GetStreamHandler(); // Will now refer to the separate interface
     }
 }

@@ -3,6 +3,7 @@ syntax = "proto3";
 package simsdkrpc;
 
 option go_package = "github.com/neurosimio/simsdk/rpc/simsdkrpc;simsdkrpc";
+option csharp_namespace = "Simsdkrpc";
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
@@ -10,12 +11,9 @@ import "google/protobuf/wrappers.proto";
 service PluginService {
   rpc GetManifest(ManifestRequest) returns (ManifestResponse);
   rpc CreateComponentInstance(CreateComponentRequest) returns (CreateComponentResponse);
-  rpc DestroyComponentInstance(DestroyComponentRequest) returns (google.protobuf.Empty);
+  rpc DestroyComponentInstance(google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc HandleMessage(SimMessage) returns (MessageResponse);
-}
-
-message DestroyComponentRequest {
-  string component_id = 1;
+  rpc MessageStream(stream PluginMessageEnvelope) returns (stream PluginMessageEnvelope);
 }
  
 message ManifestRequest {}
@@ -104,4 +102,39 @@ message SimMessage {
 
 message MessageResponse {
   repeated SimMessage outbound_messages = 1;
+}
+
+message PluginMessageEnvelope {
+  oneof content {
+    SimMessage sim_message = 1;
+    PluginAck ack = 2;
+    PluginNak nak = 3;
+    PluginInit init = 4;
+    PluginShutdown shutdown = 5;
+  }
+}
+
+message PluginInit {
+  string component_id = 1;
+}
+
+message PluginShutdown {
+  string reason = 1;
+}
+
+message PluginAck {
+  string message_id = 1;
+}
+
+message PluginNak {
+  string message_id = 1;
+  string error_message = 2;
+}
+
+message DestroyComponentRequest {
+  string component_id = 1;
+}
+
+message DestroyComponentResponse {
+  bool success = 1;
 }

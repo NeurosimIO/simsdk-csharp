@@ -43,13 +43,6 @@ namespace SimSDK.Services
             return Task.FromResult(new Rpc.CreateComponentResponse());
         }
 
-        public override Task<Google.Protobuf.WellKnownTypes.Empty> DestroyComponentInstance(
-            Rpc.DestroyComponentRequest request, Grpc.Core.ServerCallContext context)
-        {
-            _plugin.DestroyComponentInstance(request.ComponentId);
-            return Task.FromResult(new Google.Protobuf.WellKnownTypes.Empty());
-        }
-
         public override Task<Rpc.MessageResponse> HandleMessage(Rpc.SimMessage request,
             Grpc.Core.ServerCallContext context)
         {
